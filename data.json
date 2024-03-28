@@ -1,0 +1,70 @@
+{
+  "categories": [
+    {
+      "title": "Trending Now",
+      "data": [
+        {
+          "id": "id4bdc58c06e45",
+          "title": "Wolfstate chronicles: Alaska, Texas",
+          "cover": "https://m.media-amazon.com/images/I/81oAbPwHgmL._SY466_.jpg",
+          "isExist": false,
+          "release_date": ""
+        },
+        {
+          "id": "id08c04278effda",
+          "title": "Beautiful Revenge",
+          "cover": "https://m.media-amazon.com/images/I/91ibfDiiZnL._SY466_.jpg",
+          "isExist": false,
+          "release_date": ""
+        },
+        {
+          "id": "idd15dda76422c6",
+          "title": "Sin De Rella",
+          "cover": "https://astory.oss-accelerate.aliyuncs.com/en/app/common/20211114/54ffa22e81bfcaab23ed0e27beb9d346.jpg?x-oss-process=image/resize,p_62/quality,q_80",
+          "isExist": false,
+          "release_date": ""
+        },
+        {
+          "id": "idd6d908bd71417",
+          "title": "Love Revenge",
+          "cover": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjoFQlpF7v9mwb7UTnVnwbCHAEMLxV9nl8sFchqzgk_KmPGzO1OPLBDaI8MSfuHyCdr3iDesX5tSxCvD1ys0VUKT4109fDPPAQBFWc77kI5jAbaszdczUV81a5BoTky6PRjSjmCm7WoulMO5vBHbCl4JzN_HJtGyY5ICu51TMf52AZMRrP8zTYChqBOlGc5/s16000/Beautiful%20Love%20Revenge.jpg",
+          "isExist": false,
+          "release_date": ""
+        }
+      ]
+    },
+    {
+      "title": "Top Romance",
+      "data": [
+        {
+          "id": "idbbda16e391995",
+          "title": "Wife Caught Husband",
+          "cover": "https://static.outkick.com/www.outkick.com/content/uploads/2024/01/Woman-Caught-Husband-Cheating-On-Her-With-Her-Mother.jpg",
+          "isExist": true,
+          "release_date": ""
+        },
+        {
+          "id": "id8d25a4a173eda",
+          "title": "Alpha's Detective",
+          "cover": "https://m.media-amazon.com/images/I/61GWEgoNWlL._SY466_.jpg",
+          "isExist": false,
+          "release_date": ""
+        },
+        {
+          "id": "idbc9121d5df807",
+          "title": "Trained for Seduction",
+          "cover": "https://assets.lulu.com/cover_thumbs/1/q/1q55wrq6-front-shortedge-384.jpg",
+          "isExist": false,
+          "release_date": ""
+        },
+        {
+          "id": "idbd9233b0e6d02",
+          "title": "Crescent",
+          "cover": "https://as1.ftcdn.net/v2/jpg/05/64/11/90/1000_F_564119085_cYz8lZ34LS19c3xwGMFiAEzPPhaqNSrT.jpg",
+          "isExist": false,
+          "release_date": ""
+        }
+      ]
+    }
+  ]
+}

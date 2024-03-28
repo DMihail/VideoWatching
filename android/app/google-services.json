@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "726315625593",
+    "project_id": "videowatching-beefd",
+    "storage_bucket": "videowatching-beefd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:726315625593:android:020138d44688da0f1338a8",
+        "android_client_info": {
+          "package_name": "com.videowatching"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBa7qJAs4a36XHEZO0931RO0Jqs0KbONpA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
