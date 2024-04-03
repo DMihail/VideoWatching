@@ -19,9 +19,9 @@ function App(): React.JSX.Element {
       <PersistGate loading={null} persistor={persist}>
         <SafeAreaProvider>
           <StatusBar backgroundColor={COLORS.black} />
-          {__DEV__ && (
-            <Button title={'Debug'} onPress={connectToRemoteDebugger} />
-          )}
+          {/*{__DEV__ && (*/}
+          {/*  <Button title={'Debug'} onPress={connectToRemoteDebugger} />*/}
+          {/*)}*/}
           <Navigation />
         </SafeAreaProvider>
       </PersistGate>

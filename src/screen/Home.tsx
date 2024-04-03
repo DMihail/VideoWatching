@@ -1,30 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, SafeAreaView, StatusBar, SectionList} from 'react-native';
 import {MainStackProps} from '../navigation/types.ts';
-import remoteConfig from '@react-native-firebase/remote-config';
 import {Category} from '../rules/types.ts';
 import Section from '../component/home/section';
 import {COLORS} from '../rules/COLORS.ts';
+import {getRemoteValue} from '../utils/removeConfig.ts';
 
 export default function Home({route}: MainStackProps<'Home'>) {
   const [categories, setCategories] = useState<Array<Category>>([]);
   const fetch = async () => {
     try {
-      // await remoteConfig().setDefaults({
-      //   is_post_property_enabled: true,
-      //   home_page_experiment: false,
-      // });
-      // await remoteConfig().reset();
-      await remoteConfig().setConfigSettings({
-        minimumFetchIntervalMillis: 10000,
-        fetchTimeMillis: 10000,
-      });
-
-      await remoteConfig().fetch(0);
-      await remoteConfig().fetchAndActivate();
-      const categories = remoteConfig().getValue('categories').asString();
-      const parse = JSON.parse(categories);
-      setCategories(parse.categories);
+      const data = await getRemoteValue('categories');
+      console.log(data.categories);
+      setCategories(data.categories);
     } catch (e) {
       console.log(e);
     }
