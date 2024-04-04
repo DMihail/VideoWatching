@@ -1,19 +1,28 @@
 import React, {FC} from 'react';
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Movie} from '../../../rules/types.ts';
+import {
+  NavigationProp,
+  ParamListBase,
+  useNavigation,
+} from '@react-navigation/native';
+import {Book} from '../../../rules/types.ts';
 import StyledText from '../../StyledText.tsx';
 import {COLORS} from '../../../rules/COLORS.ts';
 
-const Section: FC<Movie> = ({id, cover, title, isExist, release_date}) => {
+const Section: FC<Book> = ({id, cover, title, isExist, release_date}) => {
   const date = new Date(release_date);
+  const navigation: NavigationProp<ParamListBase> = useNavigation();
   return (
-    <TouchableOpacity style={styles.container} disabled={!isExist}>
+    <TouchableOpacity
+      style={styles.container}
+      disabled={!isExist}
+      onPress={() => navigation.navigate('Player')}>
       <View>
         <Image
           source={{uri: cover}}
           style={styles.cover}
           resizeMode={'cover'}
-          blurRadius={!isExist ? 5 : 0}
+          blurRadius={!isExist ? 15 : 0}
         />
         {!isExist && (
           <Image

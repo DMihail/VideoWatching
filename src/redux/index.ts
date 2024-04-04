@@ -11,6 +11,8 @@ import {
   createSagaHelper,
   createRootSaga,
 } from 'obrigado-redux-utils';
+import * as content from './saga/content.ts';
+import {Category} from '../rules/types.ts';
 
 const persistConfig = {
   key: 'root',
@@ -18,20 +20,22 @@ const persistConfig = {
   version: 1,
   transforms: [
     PersistTransform({
-      whitelist: [],
+      whitelist: ['content'],
     }),
   ],
   stateReconciler: persistsReconciler,
 };
 
-const sagaModules = {};
+const sagaModules = {content};
 
 type Data = {
-  linkPath: Array<string>;
+  isInit: boolean;
+  content: Array<Category>;
 };
 
 const data = {
-  linkPath: [],
+  isInit: false,
+  content: [],
 };
 // Use this type inside selectors
 export type ReduxStoreState = ReduxStoreStateTemplate<Data>;

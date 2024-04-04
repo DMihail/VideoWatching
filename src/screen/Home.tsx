@@ -1,37 +1,56 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, SafeAreaView, StatusBar, SectionList} from 'react-native';
-import {MainStackProps} from '../navigation/types.ts';
-import {Category} from '../rules/types.ts';
+import {
+  StyleSheet,
+  SafeAreaView,
+  StatusBar,
+  SectionList,
+  View,
+  ActivityIndicator,
+} from 'react-native';
+import {useSelector} from 'react-redux';
 import Section from '../component/home/section';
 import {COLORS} from '../rules/COLORS.ts';
-import {getRemoteValue} from '../utils/removeConfig.ts';
+import {ReduxStoreState, SagaHelper} from '../redux';
+import {Category} from '../rules/types.ts';
 
-export default function Home({route}: MainStackProps<'Home'>) {
-  const [categories, setCategories] = useState<Array<Category>>([]);
+export default function Home() {
+  const isInit = useSelector((state: ReduxStoreState) => state.isInit);
+  const content: Array<Category> = useSelector(
+    (state: ReduxStoreState) => state.content,
+  ).toJS() as Array<Category>;
+  const [load, setLoad] = useState<boolean>(true);
+
   const fetch = async () => {
-    try {
-      const data = await getRemoteValue('categories');
-      console.log(data.categories);
-      setCategories(data.categories);
-    } catch (e) {
-      console.log(e);
-    }
+    setLoad(true);
+    await SagaHelper.run(['content', 'getContent']);
+    setLoad(false);
   };
   useEffect(() => {
-    fetch();
-  }, []);
+    if (isInit) fetch();
+  }, [isInit]);
+
   return (
     <SafeAreaView style={styles.container}>
-      <SectionList
-        sections={categories}
-        keyExtractor={item => item.title}
-        renderItem={() => {
-          return null;
-        }}
-        renderSectionHeader={({section: {title, data}}) => (
-          <Section title={title} data={data} />
-        )}
-      />
+      {load ? (
+        <View style={styles.loadView}>
+          <ActivityIndicator color={COLORS.white} size={'large'} />
+        </View>
+      ) : (
+        <SectionList
+          sections={content}
+          keyExtractor={item => item.id}
+          renderItem={() => {
+            return null;
+          }}
+          renderSectionHeader={({section: {title, data}}) => (
+            <Section
+              title={title}
+              data={data}
+              isRecommendation={title === 'recommendation'}
+            />
+          )}
+        />
+      )}
     </SafeAreaView>
   );
 }
@@ -46,5 +65,11 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 32,
     color: COLORS.white,
+  },
+  loadView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: COLORS.transparent,
   },
 });

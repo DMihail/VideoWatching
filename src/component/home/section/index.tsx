@@ -4,20 +4,33 @@ import {Category} from '../../../rules/types.ts';
 import StyledText from '../../StyledText.tsx';
 import SectionListItem from '../sectionListItem';
 import {COLORS} from '../../../rules/COLORS.ts';
+import Recommendation from '../recommendation';
 
-const Section: FC<Category> = ({title, data}) => {
+type Props = {
+  isRecommendation: boolean;
+};
+
+const Section: FC<Category & Props> = ({title, data, isRecommendation}) => {
   return (
     <View style={styles.container}>
-      <StyledText style={styles.header} fontWeight={'bold'}>
-        {title}
-      </StyledText>
+      {!isRecommendation && (
+        <StyledText style={styles.header} fontWeight={'bold'}>
+          {title}
+        </StyledText>
+      )}
       <FlatList
         data={data}
         horizontal={true}
         showsHorizontalScrollIndicator={true}
-        renderItem={({item}) => <SectionListItem {...item} />}
+        renderItem={({item}) =>
+          !isRecommendation ? (
+            <SectionListItem {...item} />
+          ) : (
+            <Recommendation {...item} />
+          )
+        }
         contentContainerStyle={styles.list}
-        indicatorStyle={'white'}
+        indicatorStyle={'black'}
       />
     </View>
   );
@@ -30,7 +43,7 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   header: {
-    fontSize: 32,
+    fontSize: 20,
     color: COLORS.white,
     marginBottom: 16,
   },
