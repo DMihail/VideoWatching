@@ -8,6 +8,17 @@ export function* getContent(): any {
       ReduxHelper.setIn(['content'], content.data);
     }
   } catch (e) {
-    if (__DEV__) console.log(e);
+    if (__DEV__) {
+      console.log(e);
+    }
+  }
+}
+
+export function* getCurrentBook(id: string): any {
+  const content = yield getRemoteValue(id);
+  if (content) {
+    return content.data;
+  } else {
+    throw new Error('Content is empty');
   }
 }

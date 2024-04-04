@@ -9,14 +9,15 @@ import {Book} from '../../../rules/types.ts';
 import StyledText from '../../StyledText.tsx';
 import {COLORS} from '../../../rules/COLORS.ts';
 
-const Section: FC<Book> = ({id, cover, title, isExist, release_date}) => {
+const Section: FC<Book> = props => {
+  const {cover, title, isExist, release_date} = props;
   const date = new Date(release_date);
   const navigation: NavigationProp<ParamListBase> = useNavigation();
   return (
     <TouchableOpacity
       style={styles.container}
       disabled={!isExist}
-      onPress={() => navigation.navigate('Player')}>
+      onPress={() => navigation.navigate('Player', props)}>
       <View>
         <Image
           source={{uri: cover}}

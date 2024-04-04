@@ -41,6 +41,7 @@ export default Section;
 const styles = StyleSheet.create({
   container: {
     marginBottom: 40,
+    marginHorizontal: 16,
   },
   header: {
     fontSize: 20,

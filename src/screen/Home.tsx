@@ -1,17 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {
-  StyleSheet,
-  SafeAreaView,
-  StatusBar,
-  SectionList,
-  View,
-  ActivityIndicator,
-} from 'react-native';
+import {StyleSheet, SafeAreaView, SectionList} from 'react-native';
 import {useSelector} from 'react-redux';
 import Section from '../component/home/section';
 import {COLORS} from '../rules/COLORS.ts';
 import {ReduxStoreState, SagaHelper} from '../redux';
 import {Category} from '../rules/types.ts';
+import Loader from '../component/Loader.tsx';
+import ContinueWatching from '../component/home/continueWatching';
 
 export default function Home() {
   const isInit = useSelector((state: ReduxStoreState) => state.isInit);
@@ -32,9 +27,7 @@ export default function Home() {
   return (
     <SafeAreaView style={styles.container}>
       {load ? (
-        <View style={styles.loadView}>
-          <ActivityIndicator color={COLORS.white} size={'large'} />
-        </View>
+        <Loader />
       ) : (
         <SectionList
           sections={content}
@@ -51,6 +44,7 @@ export default function Home() {
           )}
         />
       )}
+      <ContinueWatching />
     </SafeAreaView>
   );
 }
@@ -58,18 +52,6 @@ export default function Home() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: StatusBar.currentHeight,
     backgroundColor: COLORS.black,
-    paddingHorizontal: 16,
-  },
-  header: {
-    fontSize: 32,
-    color: COLORS.white,
-  },
-  loadView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: COLORS.transparent,
   },
 });

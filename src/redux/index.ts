@@ -12,7 +12,7 @@ import {
   createRootSaga,
 } from 'obrigado-redux-utils';
 import * as content from './saga/content.ts';
-import {Category} from '../rules/types.ts';
+import {Book, Category} from '../rules/types.ts';
 
 const persistConfig = {
   key: 'root',
@@ -20,7 +20,7 @@ const persistConfig = {
   version: 1,
   transforms: [
     PersistTransform({
-      whitelist: ['content'],
+      whitelist: ['content', 'lastBook'],
     }),
   ],
   stateReconciler: persistsReconciler,
@@ -31,11 +31,13 @@ const sagaModules = {content};
 type Data = {
   isInit: boolean;
   content: Array<Category>;
+  lastBook: Book;
 };
 
 const data = {
   isInit: false,
   content: [],
+  lastBook: null,
 };
 // Use this type inside selectors
 export type ReduxStoreState = ReduxStoreStateTemplate<Data>;

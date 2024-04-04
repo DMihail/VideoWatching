@@ -16,13 +16,13 @@ import {Book} from '../../../rules/types.ts';
 import {COLORS} from '../../../rules/COLORS.ts';
 
 const Recommendation: FC<Book> = props => {
-  const {id, cover, title, type, author, isExist} = props;
+  const {cover, title, type, author, isExist} = props;
   const navigation: NavigationProp<ParamListBase> = useNavigation();
   return (
     <TouchableOpacity
       style={styles.container}
       disabled={!isExist}
-      onPress={() => navigation.navigate('Player')}>
+      onPress={() => navigation.navigate('Player', props)}>
       <ImageBackground src={cover} style={styles.cover} resizeMode={'cover'}>
         <View style={styles.typeShell}>
           <StyledText style={styles.type} fontWeight={'bold'}>
@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
     padding: 6,
     backgroundColor: COLORS.black,
     borderRadius: 7,
+    textTransform: 'uppercase',
   },
   typeShell: {
     alignItems: 'baseline',
