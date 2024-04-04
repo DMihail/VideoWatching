@@ -1,10 +1,6 @@
-import React, {useCallback, useEffect} from 'react';
-import {Dimensions, SafeAreaView, StyleSheet} from 'react-native';
+import React, {useCallback, useState} from 'react';
+import {SafeAreaView, StyleSheet, FlatList} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import Animated, {
-  useAnimatedScrollHandler,
-  useSharedValue,
-} from 'react-native-reanimated';
 import {MainStackProps} from '../navigation/types.ts';
 import PlayerHeader from '../component/player/header';
 import {COLORS} from '../rules/COLORS.ts';
@@ -53,42 +49,20 @@ const episodes = [
   },
 ];
 
+const viewabilityConfig = {
+  viewAreaCoveragePercentThreshold: 40,
+  waitForInteraction: true,
+};
+
 export default function Player({route, navigation}: MainStackProps<'Player'>) {
-  const translateY = useSharedValue(0);
-
-  const scrollHandler = useAnimatedScrollHandler({
-    onScroll: event => {
-      translateY.value = event.contentOffset.y;
-    },
-  });
-
-  useEffect(() => {}, []);
-
-  const RenderItem = ({
-    item,
-    index,
-  }: {
-    item: VideoPlayerProps;
-    index: number;
-  }) => {
-    return (
-      <VideoPlayer
-        id={item.id}
-        title={item.title}
-        url={item.url}
-        current={index === 0}
-      />
-    );
-  };
-
-  const viewabilityConfig = {
-    viewAreaCoveragePercentThreshold: 40,
-    waitForInteraction: true,
-  };
+  const [currentEpisode, setCurrentEpisode] = useState<
+    Omit<VideoPlayerProps, 'current'>
+  >(episodes[0]);
 
   const onViewableItemsChanged = useCallback(({viewableItems}) => {
-    console.log(viewableItems);
-    // do something with viewableItems here. It’s a list of items in the viewport.
+    if (viewableItems.length === 1) {
+      setCurrentEpisode(viewableItems[0].item);
+    }
   }, []);
 
   return (
@@ -97,15 +71,11 @@ export default function Player({route, navigation}: MainStackProps<'Player'>) {
         colors={[COLORS.black, COLORS.white, COLORS.black]}
         locations={[0.1, 0.5, 1]}
         style={styles.container}>
-        <PlayerHeader title={'Episode 1'} back={() => navigation.goBack()} />
-        <Animated.FlatList
-          StickyHeaderComponent={() => (
-            <PlayerHeader
-              back={() => navigation.goBack()}
-              title={'Episode 1'}
-            />
-          )}
-          onScroll={scrollHandler}
+        <PlayerHeader
+          title={currentEpisode.title}
+          back={() => navigation.goBack()}
+        />
+        <FlatList
           pagingEnabled={true}
           scrollEventThrottle={16}
           snapToAlignment={'center'}
@@ -113,38 +83,23 @@ export default function Player({route, navigation}: MainStackProps<'Player'>) {
           data={episodes}
           onViewableItemsChanged={onViewableItemsChanged}
           viewabilityConfig={viewabilityConfig}
-          renderItem={({item, index}) => {
-            return <RenderItem item={item} index={index} />;
-          }}
+          renderItem={({item}) => (
+            <VideoPlayer
+              id={item.id}
+              title={item.title}
+              url={item.url}
+              current={item.id === currentEpisode.id}
+            />
+          )}
           keyExtractor={item => item.id}
         />
       </LinearGradient>
     </SafeAreaView>
   );
 }
-const {width, height} = Dimensions.get('window');
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  item: {
-    height,
-    width,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  videoBox: {
-    height: width,
-    width,
-    backgroundColor: 'red',
-  },
-  backgroundVideo: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
-    height: width,
-    width,
   },
 });

@@ -30,7 +30,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 15,
-    // width: '100%',
+    position: 'absolute',
+    width: '100%',
+    zIndex: 1000,
   },
   title: {
     fontSize: 20,
