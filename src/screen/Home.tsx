@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, SafeAreaView, SectionList} from 'react-native';
+import {StyleSheet, SafeAreaView, ScrollView, View} from 'react-native';
 import {useSelector} from 'react-redux';
 import Section from '../component/home/section';
 import {COLORS} from '../rules/COLORS.ts';
@@ -10,7 +10,7 @@ import ContinueWatching from '../component/home/continueWatching';
 
 export default function Home() {
   const isInit = useSelector((state: ReduxStoreState) => state.isInit);
-  const content: Array<Category> = useSelector(
+  const content = useSelector(
     (state: ReduxStoreState) => state.content,
   ).toJS() as Array<Category>;
   const [load, setLoad] = useState<boolean>(true);
@@ -26,25 +26,24 @@ export default function Home() {
 
   return (
     <SafeAreaView style={styles.container}>
-      {load ? (
-        <Loader />
-      ) : (
-        <SectionList
-          sections={content}
-          keyExtractor={item => item.id}
-          renderItem={() => {
-            return null;
-          }}
-          renderSectionHeader={({section: {title, data}}) => (
-            <Section
-              title={title}
-              data={data}
-              isRecommendation={title === 'recommendation'}
-            />
-          )}
-        />
-      )}
-      <ContinueWatching />
+      <ScrollView
+        contentContainerStyle={styles.scroll}
+        indicatorStyle={'white'}>
+        {load ? (
+          <Loader />
+        ) : (
+          content.map(item => (
+            <View key={item.title}>
+              <Section
+                title={item.title}
+                data={item.data}
+                isRecommendation={item.title === 'recommendation'}
+              />
+              {item.title === 'recommendation' && <ContinueWatching />}
+            </View>
+          ))
+        )}
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -53,5 +52,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.black,
+  },
+  scroll: {
+    flexGrow: 1,
   },
 });

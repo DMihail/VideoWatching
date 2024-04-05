@@ -20,7 +20,6 @@ export const initConfig = async () => {
 
 export const getRemoteValue = async (param: string) => {
   const value = await remoteConfig().getValue(param).asString();
-  console.log(value);
   return JSON.parse(value);
 };
 

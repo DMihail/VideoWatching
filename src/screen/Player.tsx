@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {SafeAreaView, StyleSheet, FlatList} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {MainStackProps} from '../navigation/types.ts';
@@ -7,6 +7,7 @@ import {COLORS} from '../rules/COLORS.ts';
 import VideoPlayer, {VideoPlayerProps} from '../component/player/videoPlayer';
 import {ReduxHelper, SagaHelper} from '../redux';
 import Loader from '../component/Loader.tsx';
+import {getReviewed, setReviewed} from '../utils/reviewedStorage.ts';
 
 const viewabilityConfig = {
   viewAreaCoveragePercentThreshold: 40,
@@ -16,14 +17,16 @@ const viewabilityConfig = {
 type Episode = Omit<VideoPlayerProps, 'current'>;
 
 export default function Player({route, navigation}: MainStackProps<'Player'>) {
+  const flatListRef = useRef<FlatList>(null);
   const {id} = route.params;
   const [load, setLoad] = useState<boolean>(true);
   const [episodes, setEpisodes] = useState<Array<Episode>>([]);
   const [currentEpisode, setCurrentEpisode] = useState<Episode>(episodes[0]);
 
-  const onViewableItemsChanged = useCallback(({viewableItems}) => {
+  const onViewableItemsChanged = useCallback(async ({viewableItems}) => {
     if (viewableItems.length === 1) {
       setCurrentEpisode(viewableItems[0].item);
+      await setReviewed(`${id}book`, viewableItems[0].index.toString());
     }
   }, []);
 
@@ -33,10 +36,17 @@ export default function Player({route, navigation}: MainStackProps<'Player'>) {
         ['content', 'getCurrentBook'],
         id,
       );
+      const currentPart = await getReviewed(`${id}book`);
+      console.log(currentPart);
       if (episodes && route.params) {
         setEpisodes(episodes);
-        setCurrentEpisode(episodes[0]);
         ReduxHelper.setIn(['lastBook'], route.params);
+        if (currentPart !== null) {
+          setCurrentEpisode(episodes[+currentPart]);
+          flatListRef.current?.scrollToIndex({index: +currentPart});
+        } else {
+          setCurrentEpisode(episodes[0]);
+        }
       }
     } catch (e) {
       if (__DEV__) {
@@ -65,6 +75,7 @@ export default function Player({route, navigation}: MainStackProps<'Player'>) {
             back={() => navigation.goBack()}
           />
           <FlatList
+            ref={flatListRef}
             pagingEnabled={true}
             scrollEventThrottle={16}
             snapToAlignment={'center'}

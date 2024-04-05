@@ -3,6 +3,7 @@ import {ActivityIndicator, Dimensions, StyleSheet, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Video from 'react-native-video';
 import {COLORS} from '../../../rules/COLORS.ts';
+import {getReviewed, setReviewed} from '../../../utils/reviewedStorage.ts';
 
 export type VideoPlayerProps = {
   id: string;
@@ -10,21 +11,39 @@ export type VideoPlayerProps = {
   url: string;
   current: boolean;
 };
-export default function VideoPlayer({
-  id,
-  url,
-  title,
-  current,
-}: VideoPlayerProps) {
-  const videoRef = useRef(null);
-  const [play, setPlay] = useState(false);
-  const [load, setLoad] = useState(false);
+export default function VideoPlayer({id, url, current}: VideoPlayerProps) {
+  const videoRef = useRef<Video>(null);
+  const [play, setPlay] = useState<boolean>(false);
+  const [load, setLoad] = useState<boolean>(false);
+  const [currentTime, setCurrentTime] = useState<number>(0);
+
+  const getReviewedTime = async () => {
+    const time = await getReviewed(`${id}bookPart`);
+    if (time) {
+      setCurrentTime(+time);
+    }
+  };
+
+  const saveTime = async () => {
+    if (!current && currentTime) {
+      await setReviewed(`${id}bookPart`, currentTime.toString());
+    }
+  };
+
+  useEffect(() => {
+    getReviewedTime();
+  }, []);
 
   useEffect(() => {
     if (videoRef.current && load) {
+      !play && videoRef.current.seek(currentTime);
       current ? setPlay(true) : setPlay(false);
     }
-  }, [videoRef, current, load]);
+  }, [videoRef, current, load, currentTime]);
+
+  useEffect(() => {
+    saveTime();
+  }, [currentTime, current]);
 
   return (
     <View style={styles.container}>
@@ -44,7 +63,9 @@ export default function VideoPlayer({
         ref={videoRef}
         onBuffer={() => console.log('buffer')}
         onError={e => console.log(e)}
-        onProgress={e => console.log(e)}
+        onProgress={e => setCurrentTime(e.currentTime)}
+        repeat={true}
+        // controls={true}
         paused={!play}
         resizeMode={'contain'}
         fullscreen={true}

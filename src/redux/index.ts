@@ -20,7 +20,7 @@ const persistConfig = {
   version: 1,
   transforms: [
     PersistTransform({
-      whitelist: ['content', 'lastBook'],
+      whitelist: ['content', 'lastBook', 'reviewedParts', 'reviewedBooks'],
     }),
   ],
   stateReconciler: persistsReconciler,
@@ -31,7 +31,7 @@ const sagaModules = {content};
 type Data = {
   isInit: boolean;
   content: Array<Category>;
-  lastBook: Book;
+  lastBook: Book | null;
 };
 
 const data = {

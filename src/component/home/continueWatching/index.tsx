@@ -15,13 +15,13 @@ export default function ContinueWatching() {
   const lastBook = useSelector((state: ReduxStoreState) => state.lastBook);
   const navigation: NavigationProp<ParamListBase> = useNavigation();
   return lastBook ? (
-    <View>
+    <View style={styles.view}>
       <StyledText style={styles.header} fontWeight={'bold'}>
         Continue Watching
       </StyledText>
       <TouchableOpacity
         style={styles.container}
-        onPress={() => navigation.navigate('Player', lastBook.toJS())}>
+        onPress={() => navigation.navigate('Player', lastBook)}>
         <View style={styles.row}>
           <Image src={lastBook.cover} style={styles.image} />
           <View>
@@ -47,6 +47,7 @@ export default function ContinueWatching() {
 const styles = StyleSheet.create({
   view: {
     marginHorizontal: 16,
+    marginBottom: 40,
   },
   container: {
     flexDirection: 'row',
