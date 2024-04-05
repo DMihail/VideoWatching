@@ -1,13 +1,15 @@
 import React from 'react';
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import StyledText from '../../StyledText.tsx';
 import SearchSvg from '../../../assets/svg/SearchSvg.tsx';
 import {COLORS} from '../../../rules/COLORS.ts';
 
 const gift = require('../../../assets/image/gift.png');
 export default function HomeHeader() {
+  const insets = useSafeAreaInsets();
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {paddingTop: insets.top}]}>
       <StyledText style={styles.title} fontWeight={'bold'}>
         Home
       </StyledText>

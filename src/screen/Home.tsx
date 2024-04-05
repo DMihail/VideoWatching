@@ -1,5 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, SafeAreaView, ScrollView, View} from 'react-native';
+import {
+  StyleSheet,
+  SafeAreaView,
+  ScrollView,
+  View,
+  StatusBar,
+} from 'react-native';
 import {useSelector} from 'react-redux';
 import Section from '../component/home/section';
 import {COLORS} from '../rules/COLORS.ts';

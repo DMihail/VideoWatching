@@ -1,6 +1,9 @@
 import React from 'react';
 import {Button, StatusBar} from 'react-native';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {
+  initialWindowMetrics,
+  SafeAreaProvider,
+} from 'react-native-safe-area-context';
 import {PersistGate} from 'redux-persist/integration/react';
 import {Provider} from 'react-redux';
 // @ts-ignore
@@ -17,7 +20,7 @@ function App(): React.JSX.Element {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persist}>
-        <SafeAreaProvider>
+        <SafeAreaProvider initialMetrics={initialWindowMetrics}>
           <StatusBar backgroundColor={COLORS.black} />
           {/*{__DEV__ && (*/}
           {/*  <Button title={'Debug'} onPress={connectToRemoteDebugger} />*/}
