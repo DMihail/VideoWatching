@@ -20,8 +20,9 @@ export default function Player({route, navigation}: MainStackProps<'Player'>) {
   const flatListRef = useRef<FlatList>(null);
   const {id} = route.params;
   const [load, setLoad] = useState<boolean>(true);
+  const [scrollToPart, setScrollToPart] = useState<number>();
   const [episodes, setEpisodes] = useState<Array<Episode>>([]);
-  const [currentEpisode, setCurrentEpisode] = useState<Episode>(episodes[0]);
+  const [currentEpisode, setCurrentEpisode] = useState<Episode>();
 
   const onViewableItemsChanged = useCallback(async ({viewableItems}) => {
     if (viewableItems.length === 1) {
@@ -37,13 +38,12 @@ export default function Player({route, navigation}: MainStackProps<'Player'>) {
         id,
       );
       const currentPart = await getReviewed(`${id}book`);
-      console.log(currentPart);
       if (episodes && route.params) {
         setEpisodes(episodes);
         ReduxHelper.setIn(['lastBook'], route.params);
         if (currentPart !== null) {
           setCurrentEpisode(episodes[+currentPart]);
-          flatListRef.current?.scrollToIndex({index: +currentPart});
+          setScrollToPart(+currentPart);
         } else {
           setCurrentEpisode(episodes[0]);
         }
@@ -61,9 +61,17 @@ export default function Player({route, navigation}: MainStackProps<'Player'>) {
     getBook();
   }, []);
 
+  useEffect(() => {
+    if (scrollToPart && !load && flatListRef.current) {
+      flatListRef.current?.scrollToIndex({
+        index: scrollToPart,
+      });
+    }
+  }, [flatListRef, load, scrollToPart]);
+
   return (
     <SafeAreaView style={styles.container}>
-      {load ? (
+      {!currentEpisode || load ? (
         <Loader />
       ) : (
         <LinearGradient
@@ -79,10 +87,18 @@ export default function Player({route, navigation}: MainStackProps<'Player'>) {
             pagingEnabled={true}
             scrollEventThrottle={16}
             snapToAlignment={'center'}
-            initialNumToRender={1}
             data={episodes}
             onViewableItemsChanged={onViewableItemsChanged}
             viewabilityConfig={viewabilityConfig}
+            onScrollToIndexFailed={info => {
+              const wait = new Promise(resolve => setTimeout(resolve, 500));
+              wait.then(() => {
+                flatListRef.current?.scrollToIndex({
+                  index: info.index,
+                  animated: false,
+                });
+              });
+            }}
             renderItem={({item}) => (
               <VideoPlayer
                 id={item.id}

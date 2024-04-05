@@ -25,13 +25,17 @@ export default function VideoPlayer({id, url, current}: VideoPlayerProps) {
   };
 
   const saveTime = async () => {
-    if (!current && currentTime) {
+    if (currentTime) {
       await setReviewed(`${id}bookPart`, currentTime.toString());
     }
   };
 
   useEffect(() => {
     getReviewedTime();
+
+    return () => {
+      saveTime();
+    };
   }, []);
 
   useEffect(() => {
@@ -42,7 +46,9 @@ export default function VideoPlayer({id, url, current}: VideoPlayerProps) {
   }, [videoRef, current, load, currentTime]);
 
   useEffect(() => {
-    saveTime();
+    if (!current) {
+      saveTime();
+    }
   }, [currentTime, current]);
 
   return (
@@ -65,7 +71,6 @@ export default function VideoPlayer({id, url, current}: VideoPlayerProps) {
         onError={e => console.log(e)}
         onProgress={e => setCurrentTime(e.currentTime)}
         repeat={true}
-        // controls={true}
         paused={!play}
         resizeMode={'contain'}
         fullscreen={true}

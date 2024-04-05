@@ -21,7 +21,7 @@ const Section: FC<Category & Props> = ({title, data, isRecommendation}) => {
       <FlatList
         data={data}
         horizontal={true}
-        showsHorizontalScrollIndicator={true}
+        showsHorizontalScrollIndicator={false}
         renderItem={({item}) =>
           !isRecommendation ? (
             <SectionListItem {...item} />
@@ -30,7 +30,6 @@ const Section: FC<Category & Props> = ({title, data, isRecommendation}) => {
           )
         }
         contentContainerStyle={styles.list}
-        indicatorStyle={'black'}
       />
     </View>
   );
