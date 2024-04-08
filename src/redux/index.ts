@@ -12,7 +12,7 @@ import {
   createRootSaga,
 } from 'obrigado-redux-utils';
 import * as content from './saga/content.ts';
-import {Book, Category} from '../rules/types.ts';
+import {Book, Category, Reviewed} from '../rules/types.ts';
 
 const persistConfig = {
   key: 'root',
@@ -32,12 +32,16 @@ type Data = {
   isInit: boolean;
   content: Array<Category>;
   lastBook: Book | null;
+  reviewedParts: Reviewed;
+  reviewedBooks: Reviewed;
 };
 
-const data = {
+const data: Data = {
   isInit: false,
   content: [],
   lastBook: null,
+  reviewedParts: null,
+  reviewedBooks: null,
 };
 // Use this type inside selectors
 export type ReduxStoreState = ReduxStoreStateTemplate<Data>;

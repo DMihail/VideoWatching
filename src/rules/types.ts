@@ -12,3 +12,5 @@ export type Category = {
   title: string;
   data: Array<Book>;
 };
+
+export type Reviewed = {[key: string]: number} | null;

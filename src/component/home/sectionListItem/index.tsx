@@ -34,7 +34,7 @@ const Section: FC<Book> = props => {
       </View>
 
       <StyledText style={styles.date} fontWeight={'bold'}>
-        coming {date.getMonth()}
+        coming {date.toLocaleString('en', {month: 'long'})}
       </StyledText>
       <StyledText style={styles.title} fontWeight={'semi-bold'}>
         {title}

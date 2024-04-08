@@ -5,9 +5,10 @@ import {MainStackProps} from '../navigation/types.ts';
 import PlayerHeader from '../component/player/header';
 import {COLORS} from '../rules/COLORS.ts';
 import VideoPlayer, {VideoPlayerProps} from '../component/player/videoPlayer';
-import {ReduxHelper, SagaHelper} from '../redux';
+import {ReduxHelper, ReduxStoreState, SagaHelper} from '../redux';
 import Loader from '../component/Loader.tsx';
-import {getReviewed, setReviewed} from '../utils/reviewedStorage.ts';
+import {useSelector} from 'react-redux';
+import setReviewedData from '../utils/setReviewedData.ts';
 
 const viewabilityConfig = {
   viewAreaCoveragePercentThreshold: 40,
@@ -18,18 +19,29 @@ type Episode = Omit<VideoPlayerProps, 'current'>;
 
 export default function Player({route, navigation}: MainStackProps<'Player'>) {
   const flatListRef = useRef<FlatList>(null);
+  const reviewedBooks = useSelector(
+    (state: ReduxStoreState) => state.reviewedBooks,
+  );
   const {id} = route.params;
   const [load, setLoad] = useState<boolean>(true);
   const [scrollToPart, setScrollToPart] = useState<number>();
   const [episodes, setEpisodes] = useState<Array<Episode>>([]);
   const [currentEpisode, setCurrentEpisode] = useState<Episode>();
 
-  const onViewableItemsChanged = useCallback(async ({viewableItems}) => {
-    if (viewableItems.length === 1) {
-      setCurrentEpisode(viewableItems[0].item);
-      await setReviewed(`${id}book`, viewableItems[0].index.toString());
-    }
-  }, []);
+  const onViewableItemsChanged = useCallback(
+    ({viewableItems}) => {
+      if (viewableItems.length === 1) {
+        setCurrentEpisode(viewableItems[0].item);
+        setReviewedData(
+          id,
+          'reviewedBooks',
+          viewableItems[0].index,
+          reviewedBooks ? reviewedBooks.toObject() : null,
+        );
+      }
+    },
+    [id, reviewedBooks],
+  );
 
   const getBook = async () => {
     try {
@@ -37,13 +49,13 @@ export default function Player({route, navigation}: MainStackProps<'Player'>) {
         ['content', 'getCurrentBook'],
         id,
       );
-      const currentPart = await getReviewed(`${id}book`);
+      const currentPart = reviewedBooks ? reviewedBooks[id] : 0;
       if (episodes && route.params) {
         setEpisodes(episodes);
         ReduxHelper.setIn(['lastBook'], route.params);
         if (currentPart !== null) {
-          setCurrentEpisode(episodes[+currentPart]);
-          setScrollToPart(+currentPart);
+          setCurrentEpisode(episodes[currentPart]);
+          setScrollToPart(currentPart);
         } else {
           setCurrentEpisode(episodes[0]);
         }
@@ -82,6 +94,7 @@ export default function Player({route, navigation}: MainStackProps<'Player'>) {
             title={currentEpisode.title}
             back={() => navigation.goBack()}
           />
+
           <FlatList
             ref={flatListRef}
             pagingEnabled={true}
