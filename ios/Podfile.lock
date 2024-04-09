@@ -995,6 +995,9 @@ PODS:
     - React-debug
   - react-native-safe-area-context (4.9.0):
     - React-Core
+  - react-native-simple-toast (3.3.1):
+    - React-Core
+    - Toast (~> 4)
   - react-native-video (5.2.1):
     - React-Core
     - react-native-video/Video (= 5.2.1)
@@ -1196,6 +1199,7 @@ PODS:
   - RNSVG (15.1.0):
     - React-Core
   - SocketRocket (0.6.1)
+  - Toast (4.1.0)
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -1231,6 +1235,7 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
+  - react-native-simple-toast (from `../node_modules/react-native-simple-toast`)
   - react-native-video (from `../node_modules/react-native-video`)
   - React-nativeconfig (from `../node_modules/react-native/ReactCommon`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
@@ -1280,6 +1285,7 @@ SPEC REPOS:
     - nanopb
     - PromisesObjC
     - SocketRocket
+    - Toast
 
 EXTERNAL SOURCES:
   boost:
@@ -1341,6 +1347,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
+  react-native-simple-toast:
+    :path: "../node_modules/react-native-simple-toast"
   react-native-video:
     :path: "../node_modules/react-native-video"
   React-nativeconfig:
@@ -1447,6 +1455,7 @@ SPEC CHECKSUMS:
   React-logger: 3eb80a977f0d9669468ef641a5e1fabbc50a09ec
   React-Mapbuffer: d81d930c1b7f4db284e1d721fe7fdc99230ca108
   react-native-safe-area-context: b97eb6f9e3b7f437806c2ce5983f479f8eb5de4b
+  react-native-simple-toast: 1f1cc551d419bc0ab05dcb0136554006c274789d
   react-native-video: c26780b224543c62d5e1b2a7244a5cd1b50e8253
   React-nativeconfig: e700ac3ec3d66329076bd2c2787a204411815d43
   React-NativeModulesApple: f7fa541118d195ac850ca2ea460f338152ced167
@@ -1477,6 +1486,7 @@ SPEC CHECKSUMS:
   RNScreens: 97a2a32820e632c5978d75250afa397ed9053910
   RNSVG: 50cf2c7018e57cf5d3522d98d0a3a4dd6bf9d093
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
+  Toast: ec33c32b8688982cecc6348adeae667c1b9938da
   Yoga: d17d2cc8105eed528474683b42e2ea310e1daf61
 
 PODFILE CHECKSUM: 2a3d2ee08d939beab8249b728679a5c331ec7df4

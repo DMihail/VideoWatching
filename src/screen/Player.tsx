@@ -1,5 +1,10 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {SafeAreaView, StyleSheet, FlatList} from 'react-native';
+import {
+  SafeAreaView,
+  StyleSheet,
+  FlatList,
+  useWindowDimensions,
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {MainStackProps} from '../navigation/types.ts';
 import PlayerHeader from '../component/player/header';
@@ -18,6 +23,7 @@ const viewabilityConfig = {
 type Episode = Omit<VideoPlayerProps, 'current'>;
 
 export default function Player({route, navigation}: MainStackProps<'Player'>) {
+  const {height} = useWindowDimensions();
   const flatListRef = useRef<FlatList>(null);
   const reviewedBooks = useSelector(
     (state: ReduxStoreState) => state.reviewedBooks,
@@ -100,6 +106,8 @@ export default function Player({route, navigation}: MainStackProps<'Player'>) {
             pagingEnabled={true}
             scrollEventThrottle={16}
             snapToAlignment={'center'}
+            decelerationRate={'fast'}
+            snapToInterval={height}
             data={episodes}
             onViewableItemsChanged={onViewableItemsChanged}
             viewabilityConfig={viewabilityConfig}
@@ -118,6 +126,7 @@ export default function Player({route, navigation}: MainStackProps<'Player'>) {
                 title={item.title}
                 url={item.url}
                 current={item.id === currentEpisode.id}
+                back={() => navigation.goBack()}
               />
             )}
             keyExtractor={item => item.id}

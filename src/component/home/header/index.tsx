@@ -4,6 +4,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import StyledText from '../../StyledText.tsx';
 import SearchSvg from '../../../assets/svg/SearchSvg.tsx';
 import {COLORS} from '../../../rules/COLORS.ts';
+import showSimpleToast from '../../../utils/showSimpleToast.ts';
 
 const gift = require('../../../assets/image/gift.png');
 export default function HomeHeader() {
@@ -15,10 +16,10 @@ export default function HomeHeader() {
       </StyledText>
 
       <View style={styles.iconBox}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => showSimpleToast()}>
           <Image source={gift} />
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => showSimpleToast()}>
           <SearchSvg />
         </TouchableOpacity>
       </View>

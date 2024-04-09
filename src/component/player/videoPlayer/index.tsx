@@ -9,16 +9,18 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import Video from 'react-native-video';
 import {COLORS} from '../../../rules/COLORS.ts';
-import {ReduxHelper, ReduxStoreState} from '../../../redux';
+import {ReduxStoreState} from '../../../redux';
 import {useSelector} from 'react-redux';
 import ContinueSvg from '../../../assets/svg/ContinueSvg.tsx';
 import setReviewedData from '../../../utils/setReviewedData.ts';
+import showSimpleToast from '../../../utils/showSimpleToast.ts';
 
 export type VideoPlayerProps = {
   id: string;
   title: string;
   url: string;
   current: boolean;
+  back: () => void;
 };
 export default function VideoPlayer({id, url, current}: VideoPlayerProps) {
   const videoRef = useRef<Video>(null);
@@ -61,7 +63,12 @@ export default function VideoPlayer({id, url, current}: VideoPlayerProps) {
           }}
           ref={videoRef}
           onBuffer={() => console.log('buffer')}
-          onError={e => console.log(e)}
+          onError={e => {
+            if (__DEV__) {
+              console.log(e);
+            }
+            showSimpleToast('Video loading error!');
+          }}
           onProgress={e => {
             setCurrentTime(e.currentTime);
             setReviewedData(
@@ -70,17 +77,6 @@ export default function VideoPlayer({id, url, current}: VideoPlayerProps) {
               e.currentTime,
               reviewedParts ? reviewedParts.toObject() : null,
             );
-            // setReviewedData()
-            // const obj: {[key: string]: number} = {};
-            // obj[id] = e.currentTime;
-            // if (!reviewedParts) {
-            //   ReduxHelper.setIn(['reviewedParts'], obj);
-            // } else {
-            //   ReduxHelper.setIn(['reviewedParts'], {
-            //     ...reviewedParts.toObject(),
-            //     ...obj,
-            //   });
-            // }
           }}
           repeat={true}
           paused={!play}
