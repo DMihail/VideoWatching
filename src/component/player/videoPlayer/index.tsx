@@ -22,7 +22,12 @@ export type VideoPlayerProps = {
   current: boolean;
   back: () => void;
 };
-export default function VideoPlayer({id, url, current}: VideoPlayerProps) {
+export default function VideoPlayer({
+  id,
+  url,
+  current,
+  back,
+}: VideoPlayerProps) {
   const videoRef = useRef<Video>(null);
   const reviewedParts = useSelector(
     (state: ReduxStoreState) => state.reviewedParts,
@@ -67,6 +72,7 @@ export default function VideoPlayer({id, url, current}: VideoPlayerProps) {
             if (__DEV__) {
               console.log(e);
             }
+            back();
             showSimpleToast('Video loading error!');
           }}
           onProgress={e => {
