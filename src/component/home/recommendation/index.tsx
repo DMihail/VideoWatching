@@ -67,6 +67,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.black,
     borderRadius: 7,
     textTransform: 'uppercase',
+    overflow: 'hidden',
   },
   typeShell: {
     alignItems: 'baseline',

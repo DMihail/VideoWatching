@@ -4,6 +4,7 @@ import {
   StyleSheet,
   FlatList,
   useWindowDimensions,
+  Platform,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {MainStackProps} from '../navigation/types.ts';
@@ -107,7 +108,7 @@ export default function Player({route, navigation}: MainStackProps<'Player'>) {
             scrollEventThrottle={16}
             snapToAlignment={'center'}
             decelerationRate={'fast'}
-            snapToInterval={height}
+            snapToInterval={Platform.OS === 'android' ? 0 : height}
             data={episodes}
             onViewableItemsChanged={onViewableItemsChanged}
             viewabilityConfig={viewabilityConfig}
