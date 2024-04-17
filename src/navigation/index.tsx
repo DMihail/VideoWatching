@@ -16,7 +16,7 @@ export default function RootNavigator() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={'Home'}>
+      <Stack.Navigator initialRouteName={'Player'}>
         <Stack.Screen
           name="Home"
           component={Home}

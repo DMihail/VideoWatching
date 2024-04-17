@@ -14,6 +14,7 @@ import {useSelector} from 'react-redux';
 import ContinueSvg from '../../../assets/svg/ContinueSvg.tsx';
 import setReviewedData from '../../../utils/setReviewedData.ts';
 import showSimpleToast from '../../../utils/showSimpleToast.ts';
+import Slider from '../slider';
 
 export type VideoPlayerProps = {
   id: string;
@@ -116,7 +117,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   backgroundVideo: {
-    height,
+    height: height - 60,
     width,
   },
   pause: {

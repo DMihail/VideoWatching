@@ -5,16 +5,18 @@ import {
   FlatList,
   useWindowDimensions,
   Platform,
+  View,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import {useSelector} from 'react-redux';
 import {MainStackProps} from '../navigation/types.ts';
 import PlayerHeader from '../component/player/header';
 import {COLORS} from '../rules/COLORS.ts';
 import VideoPlayer, {VideoPlayerProps} from '../component/player/videoPlayer';
 import {ReduxHelper, ReduxStoreState, SagaHelper} from '../redux';
 import Loader from '../component/Loader.tsx';
-import {useSelector} from 'react-redux';
 import setReviewedData from '../utils/setReviewedData.ts';
+import Slider from '../component/player/slider';
 
 const viewabilityConfig = {
   viewAreaCoveragePercentThreshold: 40,
@@ -90,50 +92,52 @@ export default function Player({route, navigation}: MainStackProps<'Player'>) {
 
   return (
     <SafeAreaView style={styles.container}>
-      {!currentEpisode || load ? (
-        <Loader />
-      ) : (
-        <LinearGradient
-          colors={[COLORS.black, COLORS.white, COLORS.black]}
-          locations={[0.1, 0.5, 1]}
-          style={styles.container}>
-          <PlayerHeader
-            title={currentEpisode.title}
-            back={() => navigation.goBack()}
-          />
-
-          <FlatList
-            ref={flatListRef}
-            pagingEnabled={true}
-            scrollEventThrottle={16}
-            snapToAlignment={'center'}
-            decelerationRate={'fast'}
-            snapToInterval={Platform.OS === 'android' ? 0 : height}
-            data={episodes}
-            onViewableItemsChanged={onViewableItemsChanged}
-            viewabilityConfig={viewabilityConfig}
-            onScrollToIndexFailed={info => {
-              const wait = new Promise(resolve => setTimeout(resolve, 500));
-              wait.then(() => {
-                flatListRef.current?.scrollToIndex({
-                  index: info.index,
-                  animated: false,
-                });
-              });
-            }}
-            renderItem={({item}) => (
-              <VideoPlayer
-                id={item.id}
-                title={item.title}
-                url={item.url}
-                current={item.id === currentEpisode.id}
-                back={() => navigation.goBack()}
-              />
-            )}
-            keyExtractor={item => item.id}
-          />
-        </LinearGradient>
-      )}
+      {/*{!currentEpisode || load ? (*/}
+      {/*  <Loader />*/}
+      {/*) : (*/}
+      {/*  <LinearGradient*/}
+      {/*    colors={[COLORS.black, COLORS.white, COLORS.black]}*/}
+      {/*    locations={[0.1, 0.5, 1]}*/}
+      {/*    style={styles.container}>*/}
+      {/*    <PlayerHeader*/}
+      {/*      title={currentEpisode.title}*/}
+      {/*      back={() => navigation.goBack()}*/}
+      {/*    />*/}
+      {/*    <View style={{height: height - 50}}>*/}
+      {/*      <FlatList*/}
+      {/*        ref={flatListRef}*/}
+      {/*        pagingEnabled={true}*/}
+      {/*        scrollEventThrottle={16}*/}
+      {/*        snapToAlignment={'center'}*/}
+      {/*        decelerationRate={'fast'}*/}
+      {/*        snapToInterval={Platform.OS === 'android' ? 0 : height}*/}
+      {/*        data={episodes}*/}
+      {/*        onViewableItemsChanged={onViewableItemsChanged}*/}
+      {/*        viewabilityConfig={viewabilityConfig}*/}
+      {/*        onScrollToIndexFailed={info => {*/}
+      {/*          const wait = new Promise(resolve => setTimeout(resolve, 500));*/}
+      {/*          wait.then(() => {*/}
+      {/*            flatListRef.current?.scrollToIndex({*/}
+      {/*              index: info.index,*/}
+      {/*              animated: false,*/}
+      {/*            });*/}
+      {/*          });*/}
+      {/*        }}*/}
+      {/*        renderItem={({item}) => (*/}
+      {/*          <VideoPlayer*/}
+      {/*            id={item.id}*/}
+      {/*            title={item.title}*/}
+      {/*            url={item.url}*/}
+      {/*            current={item.id === currentEpisode.id}*/}
+      {/*            back={() => navigation.goBack()}*/}
+      {/*          />*/}
+      {/*        )}*/}
+      {/*        keyExtractor={item => item.id}*/}
+      {/*      />*/}
+      {/*    </View>*/}
+      <Slider />
+      {/*  </LinearGradient>*/}
+      {/*)}*/}
     </SafeAreaView>
   );
 }
@@ -142,5 +146,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.black,
+    justifyContent: 'flex-end',
   },
 });
