@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {FC, useContext, useEffect} from 'react';
 import {Dimensions, StyleSheet, View} from 'react-native';
 import Animated, {
   useSharedValue,
@@ -7,18 +7,20 @@ import Animated, {
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import {COLORS} from '../../../rules/COLORS.ts';
 import StyledText from '../../StyledText.tsx';
-import {useState} from 'react';
+import {RecordContext} from '../videoPlayer';
+import {controlPlayerSettings} from '../../../utils/controlPlayerSettings.ts';
 
 const {width} = Dimensions.get('window');
 
-function Slider() {
-  const [currentTime, setCurrentTime] = useState<string>('00:00');
-  const [endTime, setEndTime] = useState<string>('00:00');
+const SLIDER_WIDTH = width - 78;
+
+export default function Slider() {
+  const {currentTime, endTime, rewindRecording} = useContext(RecordContext);
   const translateX = useSharedValue(0);
 
   const panGesture = Gesture.Pan()
     .onUpdate(e => {
-      if (e.absoluteX > 16 && e.absoluteX < width - 80) {
+      if (e.absoluteX > 16 && e.absoluteX < SLIDER_WIDTH) {
         if (e.absoluteX <= 20) {
           translateX.value = 0;
         } else {
@@ -27,12 +29,15 @@ function Slider() {
       }
     })
     .onEnd(e => {
-      if (e.absoluteX > 16 && e.absoluteX < width - 80) {
+      if (e.absoluteX < SLIDER_WIDTH) {
         if (e.absoluteX <= 20) {
           translateX.value = 0;
         } else {
           translateX.value = e.absoluteX;
         }
+        rewindRecording(
+          Math.floor(currentTime * (SLIDER_WIDTH / endTime) * 100) / 100,
+        );
       }
     });
 
@@ -45,6 +50,13 @@ function Slider() {
       width: translateX.value,
     };
   });
+
+  useEffect(() => {
+    if (currentTime && endTime) {
+      translateX.value = Math.floor(currentTime * (SLIDER_WIDTH / endTime));
+    }
+  }, [currentTime, endTime]);
+
   return (
     <GestureDetector gesture={panGesture}>
       <View style={styles.sliderView}>
@@ -55,19 +67,17 @@ function Slider() {
         </View>
         <View style={styles.timeContainer}>
           <StyledText fontWeight={'semi-bold'} style={styles.time}>
-            {currentTime}
+            {controlPlayerSettings(currentTime)}
           </StyledText>
 
           <StyledText fontWeight={'semi-bold'} style={styles.time}>
-            {endTime}
+            {controlPlayerSettings(endTime)}
           </StyledText>
         </View>
       </View>
     </GestureDetector>
   );
 }
-
-export default Slider;
 
 const styles = StyleSheet.create({
   timeContainer: {
@@ -88,12 +98,12 @@ const styles = StyleSheet.create({
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    width: width - 78,
+    width: SLIDER_WIDTH,
     paddingTop: 18,
   },
   slider: {
     height: 3,
-    width: width - 78,
+    width: SLIDER_WIDTH,
     borderRadius: 7,
     backgroundColor: 'rgba(255, 255, 255, 0.32)',
     justifyContent: 'center',
