@@ -76,7 +76,7 @@ android {
 
     namespace "com.videowatching"
     defaultConfig {
-        applicationId "com.videowatching"
+        applicationId "com.videowatching.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
