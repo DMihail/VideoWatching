@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, SafeAreaView, StatusBar, StyleSheet, View} from 'react-native';
+import {StatusBar, Button} from 'react-native';
 import {
   initialWindowMetrics,
   SafeAreaProvider,
@@ -11,40 +11,25 @@ import NativeDevSettings from 'react-native/Libraries/NativeModules/specs/Native
 import {persist, store} from './redux';
 import Navigation from './navigation';
 import {COLORS} from './rules/COLORS.ts';
-import Slider from './component/player/slider';
 
 function App(): React.JSX.Element {
   const connectToRemoteDebugger = () => {
     NativeDevSettings.setIsDebuggingRemotely(true);
   };
 
-  //   return (
-  //     <Provider store={store}>
-  //       <PersistGate loading={null} persistor={persist}>
-  //         <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-  //           <StatusBar backgroundColor={COLORS.black} />
-  //           {/*{__DEV__ && (*/}
-  //           {/*  <Button title={'Debug'} onPress={connectToRemoteDebugger} />*/}
-  //           {/*)}*/}
-  //           <Navigation />
-  //         </SafeAreaProvider>
-  //       </PersistGate>
-  //     </Provider>
-  //   );
-  // }
-
   return (
-    <View style={styles.container}>
-      <View style={styles.container} />
-      <Slider />
-    </View>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persist}>
+        <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+          <StatusBar backgroundColor={COLORS.black} />
+          {/*{__DEV__ && (*/}
+          {/*  <Button title={'Debug'} onPress={connectToRemoteDebugger} />*/}
+          {/*)}*/}
+          <Navigation />
+        </SafeAreaProvider>
+      </PersistGate>
+    </Provider>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.black,
-  },
-});
 export default App;

@@ -8,13 +8,12 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Video from 'react-native-video';
+import {useSelector} from 'react-redux';
 import {COLORS} from '../../../rules/COLORS.ts';
 import {ReduxStoreState} from '../../../redux';
-import {useSelector} from 'react-redux';
-import ContinueSvg from '../../../assets/svg/ContinueSvg.tsx';
 import setReviewedData from '../../../utils/setReviewedData.ts';
 import showSimpleToast from '../../../utils/showSimpleToast.ts';
-import Slider from '../slider';
+import PlayerControl from '../playerControl';
 
 export type VideoPlayerProps = {
   id: string;
@@ -33,9 +32,11 @@ export default function VideoPlayer({
   const reviewedParts = useSelector(
     (state: ReduxStoreState) => state.reviewedParts,
   );
-  const [play, setPlay] = useState<boolean>(false);
+  const [isPlay, setIsPlay] = useState<boolean>(false);
   const [load, setLoad] = useState<boolean>(false);
   const [currentTime, setCurrentTime] = useState<number>(0);
+
+  const play = () => setIsPlay(!play);
 
   useEffect(() => {
     if (reviewedParts && reviewedParts[id]) {
@@ -46,11 +47,11 @@ export default function VideoPlayer({
   useEffect(() => {
     if (videoRef.current && load) {
       !play && videoRef.current.seek(currentTime);
-      current ? setPlay(true) : setPlay(false);
+      current ? setIsPlay(true) : setIsPlay(false);
     }
   }, [videoRef, current, load, currentTime]);
   return (
-    <TouchableWithoutFeedback onPress={() => setPlay(!play)}>
+    <TouchableWithoutFeedback onPress={play}>
       <View style={styles.container}>
         {!load && (
           <LinearGradient
@@ -86,17 +87,13 @@ export default function VideoPlayer({
             );
           }}
           repeat={true}
-          paused={!play}
-          resizeMode={'contain'}
+          paused={!isPlay}
+          resizeMode={'cover'}
           fullscreen={false}
           style={styles.backgroundVideo}
           id={id}
         />
-        {!play && (
-          <View style={styles.pause}>
-            <ContinueSvg width={50} height={50} fill={COLORS.white} />
-          </View>
-        )}
+        <PlayerControl isPlay={isPlay} play={play} />
       </View>
     </TouchableWithoutFeedback>
   );
@@ -108,6 +105,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
+    height,
   },
   gradientLoader: {
     height: width,
@@ -117,7 +115,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   backgroundVideo: {
-    height: height - 60,
+    height: width,
     width,
   },
   pause: {
