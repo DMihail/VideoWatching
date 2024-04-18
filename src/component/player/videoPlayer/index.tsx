@@ -51,6 +51,11 @@ export default function VideoPlayer({
   const [load, setLoad] = useState<boolean>(false);
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [endTime, setEndTime] = useState<number>(0);
+
+  const play = useCallback(() => {
+    setIsPlay(!isPlay);
+  }, [isPlay]);
+
   const rewindRecording = useCallback(
     (time: number) => {
       if (videoRef.current) {
@@ -68,10 +73,6 @@ export default function VideoPlayer({
     }),
     [endTime, currentTime, rewindRecording],
   );
-
-  const play = useCallback(() => {
-    setIsPlay(!isPlay);
-  }, [isPlay]);
 
   useEffect(() => {
     if (reviewedParts && reviewedParts[id]) {

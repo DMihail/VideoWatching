@@ -1,4 +1,4 @@
-import React, {FC, useContext, useEffect} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {Dimensions, StyleSheet, View} from 'react-native';
 import Animated, {
   useSharedValue,
@@ -19,26 +19,18 @@ export default function Slider() {
   const translateX = useSharedValue(0);
 
   const panGesture = Gesture.Pan()
+    .runOnJS(true)
     .onUpdate(e => {
-      if (e.absoluteX > 16 && e.absoluteX < SLIDER_WIDTH) {
-        if (e.absoluteX <= 20) {
-          translateX.value = 0;
-        } else {
-          translateX.value = e.absoluteX;
-        }
+      if (e.x > 0 && e.x < SLIDER_WIDTH) {
+        translateX.value = e.x;
+      } else if (e.x < 0) {
+        translateX.value = 0;
+      } else if (e.x < SLIDER_WIDTH) {
+        translateX.value = SLIDER_WIDTH;
       }
     })
     .onEnd(e => {
-      if (e.absoluteX < SLIDER_WIDTH) {
-        if (e.absoluteX <= 20) {
-          translateX.value = 0;
-        } else {
-          translateX.value = e.absoluteX;
-        }
-        rewindRecording(
-          Math.floor(currentTime * (SLIDER_WIDTH / endTime) * 100) / 100,
-        );
-      }
+      rewindRecording(translateX.value / (SLIDER_WIDTH / endTime));
     });
 
   const scrollTranslationStyle = useAnimatedStyle(() => {
@@ -105,7 +97,7 @@ const styles = StyleSheet.create({
     height: 3,
     width: SLIDER_WIDTH,
     borderRadius: 7,
-    backgroundColor: 'rgba(255, 255, 255, 0.32)',
+    backgroundColor: COLORS.slider,
     justifyContent: 'center',
   },
   progress: {
