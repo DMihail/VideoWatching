@@ -50,6 +50,7 @@ export default function VideoPlayer({
       current ? setIsPlay(true) : setIsPlay(false);
     }
   }, [videoRef, current, load, currentTime]);
+
   return (
     <TouchableWithoutFeedback onPress={play}>
       <View style={styles.container}>

@@ -14,33 +14,33 @@ import RightArrowSvg from '../../../assets/svg/RightArrowSvg.tsx';
 export default function ContinueWatching() {
   const lastBook = useSelector((state: ReduxStoreState) => state.lastBook);
   const navigation: NavigationProp<ParamListBase> = useNavigation();
-  return lastBook ? (
-    <View style={styles.view}>
-      <StyledText style={styles.header} fontWeight={'bold'}>
-        Continue Watching
-      </StyledText>
-      <TouchableOpacity
-        style={styles.container}
-        onPress={() => navigation.navigate('Player', lastBook)}>
-        <View style={styles.row}>
-          <Image src={lastBook.cover} style={styles.image} />
-          <View>
-            <StyledText style={styles.title} fontWeight={'bold'}>
-              {lastBook.title}
-            </StyledText>
-            <StyledText style={styles.subtitle} fontWeight={'regular'}>
-              {lastBook.author}
-            </StyledText>
+  return (
+    lastBook && (
+      <View style={styles.view}>
+        <StyledText style={styles.header} fontWeight={'bold'}>
+          Continue Watching
+        </StyledText>
+        <TouchableOpacity
+          style={styles.container}
+          onPress={() => navigation.navigate('Player', lastBook.toObject())}>
+          <View style={styles.row}>
+            <Image src={lastBook.cover} style={styles.image} />
+            <View>
+              <StyledText style={styles.title} fontWeight={'bold'}>
+                {lastBook.title}
+              </StyledText>
+              <StyledText style={styles.subtitle} fontWeight={'regular'}>
+                {lastBook.author}
+              </StyledText>
+            </View>
           </View>
-        </View>
 
-        <View>
-          <RightArrowSvg />
-        </View>
-      </TouchableOpacity>
-    </View>
-  ) : (
-    <View />
+          <View>
+            <RightArrowSvg />
+          </View>
+        </TouchableOpacity>
+      </View>
+    )
   );
 }
 

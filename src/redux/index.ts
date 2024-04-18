@@ -31,12 +31,12 @@ const sagaModules = {content};
 type Data = {
   isInit: boolean;
   content: Array<Category>;
-  lastBook: Book | null;
+  lastBook: Book;
   reviewedParts: Reviewed;
   reviewedBooks: Reviewed;
 };
 
-const data: Data = {
+const data = {
   isInit: false,
   content: [],
   lastBook: null,
