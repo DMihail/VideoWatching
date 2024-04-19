@@ -22,6 +22,8 @@ import {ReduxStoreState} from '../../../redux';
 import setReviewedData from '../../../utils/setReviewedData.ts';
 import showSimpleToast from '../../../utils/showSimpleToast.ts';
 import PlayerControl from '../playerControl';
+import Loader from '../../Loader.tsx';
+import ContinueSvg from '../../../assets/svg/ContinueSvg.tsx';
 
 type Context = {
   endTime: number;
@@ -45,6 +47,7 @@ const VideoPlayer = memo(function ({id, url, current, back}: VideoPlayerProps) {
   );
   const [isPlay, setIsPlay] = useState<boolean>(false);
   const [load, setLoad] = useState<boolean>(false);
+  const [seekLoad, setSeekLoad] = useState<boolean>(false);
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [endTime, setEndTime] = useState<number>(0);
 
@@ -55,6 +58,7 @@ const VideoPlayer = memo(function ({id, url, current, back}: VideoPlayerProps) {
   const rewindRecording = useCallback(
     (time: number) => {
       if (videoRef.current) {
+        setSeekLoad(true);
         videoRef.current.seek(time);
       }
     },
@@ -99,6 +103,10 @@ const VideoPlayer = memo(function ({id, url, current, back}: VideoPlayerProps) {
             source={{
               uri: url,
             }}
+            onSeek={() => {
+              setSeekLoad(false);
+              setIsPlay(true);
+            }}
             onLoad={data => {
               setLoad(true);
               setEndTime(data.duration);
@@ -133,7 +141,13 @@ const VideoPlayer = memo(function ({id, url, current, back}: VideoPlayerProps) {
             style={styles.backgroundVideo}
             id={id}
           />
-          {load && current && <PlayerControl isPlay={isPlay} play={play} />}
+          {load && current && !isPlay && (
+            <PlayerControl isPlay={isPlay} play={play} />
+          )}
+          {load && !isPlay && (
+            <ContinueSvg width={50} height={52} style={styles.pause} />
+          )}
+          {seekLoad && <Loader />}
         </View>
       </TouchableWithoutFeedback>
     </RecordContext.Provider>
@@ -159,11 +173,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   backgroundVideo: {
-    height: width,
+    position: 'absolute',
+    height,
     width,
   },
   pause: {
-    position: 'absolute',
     opacity: 0.5,
   },
 });

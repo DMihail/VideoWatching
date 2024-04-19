@@ -25,6 +25,8 @@ export default PlayerControl;
 
 const styles = StyleSheet.create({
   container: {
+    position: 'absolute',
+    bottom: 0,
     width: width - 32,
     marginHorizontal: 16,
     alignItems: 'center',
