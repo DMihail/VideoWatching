@@ -1,5 +1,6 @@
 import React, {
   createContext,
+  memo,
   useCallback,
   useEffect,
   useMemo,
@@ -37,12 +38,7 @@ export type VideoPlayerProps = {
   current: boolean;
   back: () => void;
 };
-export default function VideoPlayer({
-  id,
-  url,
-  current,
-  back,
-}: VideoPlayerProps) {
+const VideoPlayer = memo(function ({id, url, current, back}: VideoPlayerProps) {
   const videoRef = useRef<Video>(null);
   const reviewedParts = useSelector(
     (state: ReduxStoreState) => state.reviewedParts,
@@ -82,7 +78,7 @@ export default function VideoPlayer({
 
   useEffect(() => {
     if (videoRef.current && load) {
-      !play && videoRef.current.seek(currentTime);
+      !isPlay && videoRef.current.seek(currentTime);
       current ? setIsPlay(true) : setIsPlay(false);
     }
   }, [videoRef, current, load, currentTime]);
@@ -107,6 +103,11 @@ export default function VideoPlayer({
               setLoad(true);
               setEndTime(data.duration);
             }}
+            onLoadStart={() => {
+              setLoad(false);
+              setIsPlay(false);
+            }}
+            currentTime={currentTime}
             ref={videoRef}
             onBuffer={() => console.log('buffer')}
             onError={e => {
@@ -132,12 +133,15 @@ export default function VideoPlayer({
             style={styles.backgroundVideo}
             id={id}
           />
-          <PlayerControl isPlay={isPlay} play={play} />
+          {load && current && <PlayerControl isPlay={isPlay} play={play} />}
         </View>
       </TouchableWithoutFeedback>
     </RecordContext.Provider>
   );
-}
+});
+
+export default VideoPlayer;
+
 const {width, height} = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {

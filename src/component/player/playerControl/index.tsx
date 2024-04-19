@@ -14,7 +14,7 @@ const PlayerControl: FC<PlayerControlProps> = ({isPlay, play}) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.pause} onPress={play}>
-        {isPlay ? <PauseSvg /> : <ContinueSvg />}
+        {isPlay ? <PauseSvg /> : <ContinueSvg width={18} height={18} />}
       </TouchableOpacity>
       <Slider />
     </View>
