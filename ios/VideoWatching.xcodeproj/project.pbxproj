@@ -527,7 +527,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.videowatching.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.videowatching;
 				PRODUCT_NAME = VideoWatching;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -561,7 +561,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.videowatching.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.videowatching;
 				PRODUCT_NAME = VideoWatching;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
