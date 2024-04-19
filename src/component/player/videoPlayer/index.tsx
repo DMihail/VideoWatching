@@ -141,9 +141,7 @@ const VideoPlayer = memo(function ({id, url, current, back}: VideoPlayerProps) {
             style={styles.backgroundVideo}
             id={id}
           />
-          {load && current && !isPlay && (
-            <PlayerControl isPlay={isPlay} play={play} />
-          )}
+          {load && current && <PlayerControl isPlay={isPlay} play={play} />}
           {load && !isPlay && (
             <ContinueSvg width={50} height={52} style={styles.pause} />
           )}
