@@ -15,7 +15,7 @@ import {
   View,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import Video from 'react-native-video';
+import Video, {LoadError, OnProgressData} from 'react-native-video';
 import {useSelector} from 'react-redux';
 import {COLORS} from '../../../rules/COLORS.ts';
 import {ReduxStoreState} from '../../../redux';
@@ -48,6 +48,7 @@ const VideoPlayer = memo(function ({id, url, current, back}: VideoPlayerProps) {
   const [isPlay, setIsPlay] = useState<boolean>(false);
   const [load, setLoad] = useState<boolean>(false);
   const [seekLoad, setSeekLoad] = useState<boolean>(false);
+  const [readyDisplay, setReadyDisplay] = useState<boolean>(false);
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [endTime, setEndTime] = useState<number>(0);
 
@@ -74,6 +75,24 @@ const VideoPlayer = memo(function ({id, url, current, back}: VideoPlayerProps) {
     [endTime, currentTime, rewindRecording],
   );
 
+  const onProgress = (e: OnProgressData) => {
+    setCurrentTime(e.currentTime);
+    setReviewedData(
+      id,
+      'reviewedParts',
+      e.currentTime,
+      reviewedParts ? reviewedParts.toObject() : null,
+    );
+  };
+
+  const errorLoad = (e: LoadError) => {
+    if (__DEV__) {
+      console.log(e);
+    }
+    back();
+    showSimpleToast('Video loading error!');
+  };
+
   useEffect(() => {
     if (reviewedParts && reviewedParts[id]) {
       setCurrentTime(reviewedParts[id]);
@@ -91,7 +110,7 @@ const VideoPlayer = memo(function ({id, url, current, back}: VideoPlayerProps) {
     <RecordContext.Provider value={contextValue}>
       <TouchableWithoutFeedback onPress={play}>
         <View style={styles.container}>
-          {!load && (
+          {(!load || !readyDisplay) && (
             <LinearGradient
               colors={[COLORS.black, COLORS.white, COLORS.black]}
               locations={[0.1, 0.5, 1]}
@@ -115,25 +134,14 @@ const VideoPlayer = memo(function ({id, url, current, back}: VideoPlayerProps) {
               setLoad(false);
               setIsPlay(false);
             }}
+            onReadyForDisplay={() => {
+              setReadyDisplay(true);
+            }}
+            muted={!readyDisplay}
             currentTime={currentTime}
             ref={videoRef}
-            onBuffer={() => console.log('buffer')}
-            onError={e => {
-              if (__DEV__) {
-                console.log(e);
-              }
-              back();
-              showSimpleToast('Video loading error!');
-            }}
-            onProgress={e => {
-              setCurrentTime(e.currentTime);
-              setReviewedData(
-                id,
-                'reviewedParts',
-                e.currentTime,
-                reviewedParts ? reviewedParts.toObject() : null,
-              );
-            }}
+            onError={errorLoad}
+            onProgress={onProgress}
             repeat={true}
             paused={!isPlay}
             resizeMode={'cover'}

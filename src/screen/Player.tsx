@@ -77,6 +77,16 @@ export default function Player({route, navigation}: MainStackProps<'Player'>) {
     }
   };
 
+  const onScrollToIndexFailed = (info: {index: number}) => {
+    const wait = new Promise(resolve => setTimeout(resolve, 500));
+    wait.then(() => {
+      flatListRef.current?.scrollToIndex({
+        index: info.index,
+        animated: false,
+      });
+    });
+  };
+
   useEffect(() => {
     getBook();
   }, []);
@@ -113,15 +123,7 @@ export default function Player({route, navigation}: MainStackProps<'Player'>) {
               data={episodes}
               onViewableItemsChanged={onViewableItemsChanged}
               viewabilityConfig={viewabilityConfig}
-              onScrollToIndexFailed={info => {
-                const wait = new Promise(resolve => setTimeout(resolve, 500));
-                wait.then(() => {
-                  flatListRef.current?.scrollToIndex({
-                    index: info.index,
-                    animated: false,
-                  });
-                });
-              }}
+              onScrollToIndexFailed={onScrollToIndexFailed}
               renderItem={({item}) => (
                 <VideoPlayer
                   id={item.id}
